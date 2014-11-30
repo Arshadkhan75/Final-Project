@@ -1,0 +1,126 @@
+#Hazard complaint
+customer(1, danil);
+customer(2, peter);
+customer(3, dominic);
+customer(4, jack);
+customer(5, ravi);
+customer(6, umer);
+customer(7, parker);
+customer(8, lamen);
+
+#Customer type
+profession(1,"it engineer");
+profession(2,student);
+profession(3,doctor);
+profession(4,"civil servent");
+profession(5,"sale man");
+profession(6, jobless);
+profession(7, "stock taker");
+profession(8, lecturer);
+
+
+#Hazard types
+hazard(1,slip);
+hazard(2,trip);
+hazard(3, "stuck in door");
+hazard(4, "slippery surface");
+hazard(5, "esclator slippery");
+hazard(6, "platform edge narrow");
+hazard(7, "rain water on platform");
+hazard(8, "stuck in lift");
+hazard(9, "lift very bad smell");
+hazard(10, "station concourse slippery");
+hazard(11, "train door close very quickly");
+hazard(12, "train floor slippery");
+hazard(13, "luggage unattended");
+hazard(14, "too many people at platform");
+
+
+
+#stations
+station(1,"bow church");
+station(2,"stratford");
+station(3,"pudding mill lane");
+station (4, "devons road");
+station(5, "langon park");
+station(6, "Al saints");
+station(7, "poplar");
+station(8, "west ferry");
+station(9, "lime house");
+station(10, "shadwell");
+station(11, bank);
+station(12, "canary wharf");
+station(13, "Heron Quay");
+
+#hazardious stations customer wise
+
+hazard_station(1,1,"bow church");
+hazard_station(2,2,"stratford");
+hazard_station(3,3,"pudding mill lane");
+hazard_station(1,4,"bow church");
+hazard_station(4,5,"langdon park");
+hazard_station(3,12,"canary wharf");
+hazard_station(6,13,"Heron Quay");
+#customer complaint
+
+complaint(1,1,10);
+complaint(2,1,13);
+complaint(3,2,2);
+complaint(1,4,5);
+complaint(6,7,2);
+complaint(2,8,9);
+complaint(5,13,8);
+complaint(8,11,5);
+
+#Query
+_echo("list of hazards at different stations");
+
+#stations Station(Sq,St) :- station(Sq,St);
+#h_station Hazard(Hsq, Hst):- hazard(Hsq,Hst);
+#?-  stations(Sq,St);
+#?-  h_station(A,B);
+
+#_echo("Stations with most common hazard");
+#retrieve(S,H):- station(ID,S) & hazard(ID,H);
+
+#?- retrieve(S,H);
+
+_echo("Station most complain by customer");
+
+#cust (CID,C):- customer(CID,C);
+#stat (CID,SID,S):- station(CID,SID,S);
+#comp (C,S,Comp):-  comp(C,S,Comp);
+#match(C,S):- cust(CID,C) & stat(CID,SID,S);
+#?- match(C,S);
+
+####################################################################
+# This Query bring All most complains stations with  Customer who
+# compalins  with their profession.
+####################################################################
+_echo("Station most complain by Customers with profession:");
+
+cust (Cid,C):- customer(Cid,C);
+prof(Cid,P):-  profession(Cid,P);
+stat(Sid,S):-  station(Sid,S);
+match(Cid,C,P):-   cust(Cid,C) &  prof(Cid,P);
+h_s_c(C,P,S):-   hazard_station(Cid,ID,S) & match(Cid,C,P);
+?- h_s_c(C,P,S);	 
+
+
+#####################################################################
+# This query bring all customer wise complaint with station name and 
+# their complain type.
+#####################################################################
+_echo("Station wise complain type");
+
+ t_h(Hid,H) :-  hazard(Hid,H);
+ s_h(Sid,S):-   station(Sid,S);
+ c_h_c(Cid,C):- customer(Cid,C);
+ 
+ c_h(Hid,H,Cid,Sid):-     t_h(Hid,H) & complaint(Cid,Sid,Hid);
+ c_s(Sid,S,Hid,Cid):-     s_h(Sid,S) & complaint(Cid,Sid,Hid);
+ c_c_h_c(Cid,C,Hid,Sid):- c_h_c(Cid,C) & complaint(Cid,Sid,Hid);
+ h_c_c_w_s(C,S,H):- c_h(Hid,H,Cid,Sid) & c_s(Sid,S,Hid,Cid) & c_c_h_c(Cid,C,Hid,Sid);
+?- h_c_c_w_s(C,S,H);
+ 
+

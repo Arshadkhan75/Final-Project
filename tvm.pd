@@ -1,0 +1,75 @@
+#TVM  indexing
+
+customer(peter);
+customer(palaf);
+customer(paul);
+customer(ben);
+customer(charles);
+customer(jun);
+station(station,limehouse);
+station(station,stratfor);
+station(station, greenwich);
+station(sation, westferry);
+station(station, poplar);
+
+#customer
+term(customer, peter);
+term(customer, palaf);
+term(customer, paul);
+term(customer, ben);
+term(customer, charles);
+
+c_s(limehouse, peter);
+c_s(stratford, palaf);
+c_s(westferry, ben);
+c_s(poplar, charles);
+c_s(greenwich, jun);
+#tvm
+tvm(tvm90, limehouse);
+tvm(tvm91, limehouse);
+tvm(tvm92, westferry);
+tvm(tvm93, westferry);
+tvm(tvm94, poplar);
+tvm(tvm95, stratford);
+tvm(tvm96, stratford);
+tvm(tvm90, greenwich);
+tvm(tvm92, devensroad);
+#tvm problems 
+_echo("Ticket Vending Machine customer complains");
+0.9 problem(tvm90,"coin stuck every time in ticket machine ");
+0.5 problem(tvm90, "ticket machine display problem");
+0.6 problem(tvm91, "ticket machine out of service ");
+0.4 problem(tvm92, "ticket machine display screen blank");
+0.3 problem(tvm93, "ticket machine taking coin but not issuing ticket");
+0.2 problem(tvm94, "ticket machine oyster touch is not reading oyster card");
+0.8 problme(tvm95, "ticket machine recipt button not working");
+0.1 problme(tvm96, "ticket machine out of service");
+
+
+complain(tvm,tvm90);
+complain(tvm,tvm91);
+complain(tvm,tvm92);
+complain(tvm,tvm93);
+complain(tvm,tvm94);
+complain(tvm,tvm95);
+complain(tvm,tvm96);
+
+ 
+
+# list of customer complaining
+0.8 retriev_c(C):- customer(C);
+# query customers
+?- retriev_c(C);
+# query customers stations
+0.4 retriev_s(C,S) :- retriev_c(C)  &  c_s(S,C);
+?- retriev_s(C,S);
+#list of stations which most problem of tvm.
+0.7 retriev_tvm(T,S):- retriev_s(C,S) & tvm(T,S);
+?- retriev_tvm(T,S);
+# list of problme in ticket machine 
+_echo("Ticket vending machine customer complains");
+0.2 retriev_t_m(T,S,P):- tvm(T,S) & problem(T,P);
+
+
+
+?- retriev_t_m(T,P,S);

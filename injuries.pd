@@ -1,0 +1,75 @@
+
+#customer injuries
+ 
+customer(1,marry);
+customer(2,margarate);
+customer(3,anthony);
+customer(4,pavan);
+customer(5,jun);
+customer(6,farooq);
+customer(7,shahid);
+customer(8,elmar);
+customer(9,jack);
+
+# injuries at stations
+injury(1,"slip on stairs");
+injury(2,"nail cut in train door");
+injury(3,"sliped at platform ");
+injury(4,"stuck in door ");
+injury(5,"tvm machine cut and ");
+injury(6,"push by customer");
+injury(7,"hit by train");
+injury(8,"contious at platform");
+injury(9,"door hit hand with force");
+
+#serious injury
+serious_injury(1,7);
+serious_injury(2,2);
+serious_injury(3,3);
+
+#service
+
+#inform manager
+
+manager_area(lucy,"DLR");
+#manager_area(smith, "Underground");
+#manager_area(tomm, "Overground");
+
+#customer complaint with injury type 
+
+cust_inj_comp(1,1,4);
+cust_inj_comp(2,2,5);
+cust_inj_comp(3,3,3);
+cust_inj_comp(4,4,1);
+cust_inj_comp(5,5,2);
+cust_inj_comp(6,6,6);
+cust_inj_comp(7,7,9);
+cust_inj_comp(8,8,7);
+cust_inj_comp(9,9,8);
+
+
+##########################################
+#list all injuries of customers:
+##########################################
+
+_echo(" Customer Complain List");
+
+cust(Cid,C) :- customer(Cid,C) & cust_inj_comp(CmId,Cid,Iid);
+match(Iid,I) :- injury(Iid,I) & cust_inj_comp(CmId,Cid,Iid);
+retrieve(Cmid,C,I) :- cust(Cid,C) & match(Iid,I) & cust_inj_comp(Cmid,Cid,Iid);
+_sort(retrieve);
+?- retrieve(Cmid,C,I);
+
+############################################
+#inform manager serious injury : 
+############################################
+
+inform_manager_evidence(Name,I) :-
+            cust_inj_comp(Id,Cid,Iid) &
+            serious_injury(Sid,Id) &
+            manager_area(Name,Dept) &
+           injury(Iid,I);
+
+?-  inform_manager_evidence(Name,I);
+
+                         

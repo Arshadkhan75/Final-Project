@@ -1,5 +1,5 @@
 #TVM  indexing
-
+#list of all customer and their relationships with other things.
 customer(peter);
 customer(palaf);
 customer(paul);
